@@ -49,6 +49,41 @@ app.post('/api/post/new',async (req, res) => {
 }
 })
 
+app.get('/api/posts/all', (req, res) => {
+    PostModel.find()
+        .then(result => {
+            res.send({ success: true, result: result });
+        })
+        .catch(err => {
+            res.send({ success: false, msg: err });
+        });
+});
+
+app.post('/api/post/update', (req, res) => {
+    let id = req.body._id
+    let payload = req.body
+
+    PostModel.findByIdAndUpdate(id, payload,{ new: true })
+    .then(result => {
+        res.send({ success: true, result: result });
+    })
+    .catch(err => {
+        res.send({ success: false, msg: err });
+    });
+})
+
+app.post('/api/post/remove', (req, res) => {
+    let id = req.body._id
+    
+    PostModel.findByIdAndDelete(id)
+    .then(result => {
+        res.send({ success: true, result: result });
+    })
+    .catch(err => {
+        res.send({ success: false, msg: err });
+    });
+})
+
 
 app.listen(port, () => {
     console.log(`server is running on port : ${port}`)
